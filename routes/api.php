@@ -26,7 +26,7 @@ Route::group([
     'namespace' => 'App\Http\Controllers\Api\V1'
 ], function() {
     Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('incoices', InvoiceController::class);
+    Route::apiResource('invoices', InvoiceController::class);
 });
 
 
