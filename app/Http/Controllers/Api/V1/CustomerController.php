@@ -22,15 +22,18 @@ class CustomerController extends Controller
         $filter = new CustomerFilter();
 
         # Transform the filer
-        $queryItems = $filter->transform($request); //[['column', 'operator', 'value']]
+        $filterItems = $filter->transform($request); //[['column', 'operator', 'value']]
 
-        # Check for valid filter options
-        if (count($queryItems) == 0) {
-            return new CustomerCollection(Customer::paginate());
-        } else {
-            $customers = Customer::where($queryItems)->paginate();
-            return new CustomerCollection($customers->appends($request->query()));
+        $includeInvoices = $request->query('includeInvoices'); 
+        $customers = Customer::where($filterItems);
+
+        # If included voices is true, we fetch customers together with invoices
+        if ($includeInvoices) {
+            $customers = $customers->with('invoices');
         }
+        return new CustomerCollection(
+            $customers->paginate()->appends($request->query())
+        );
     }
 
     /**
@@ -54,6 +57,10 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
+        $includeInvoices = request()->query('includeInvoices'); 
+        if ($includeInvoices) {
+            return new CustomerResource($customer->loadMissing('invoices'));
+        }
         return new CustomerResource($customer);
     }
 
