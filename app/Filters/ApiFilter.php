@@ -1,33 +1,17 @@
 <?php
 
-namespace App\Services\V1;
+namespace App\Filters;
 
 use Illuminate\Http\Request;
 
-class CustomerQuery {
-
-    protected $safeParms = [
-        'name' => ['eq'],
-        'type' => ['eq'],
-        'email' => ['eq'],
-        'address' => ['eq'],
-        'city' => ['eq'],
-        'state' => ['eq'],
-        'postalCode' => ['eq', 'gt', 'lt']
-    ];
+class ApiFilter {
+    protected $safeParms = [];
 
     # Maps to the Database
-    protected $columnMap = [
-        'postalCode' => 'postal_code'
-    ];
+    protected $columnMap = [];
 
-    protected $operatorMap = [
-        'eq' => '=', // Equal To
-        'lt' => '<', // Less Than
-        'lte' => '<=', // Less Than Equal To
-        'gt' => '>', // Greater Than
-        'gte' => '<=', // Greater Than Equal To
-    ];
+    # Map the operators
+    protected $operatorMap = [];
 
     public function transform(Request $request) {
         $eloQuery =[]; //Eloquent Query
@@ -57,9 +41,6 @@ class CustomerQuery {
         }
         return $eloQuery;
     }
-
 }
-
-
 
 
