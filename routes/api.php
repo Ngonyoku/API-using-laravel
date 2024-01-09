@@ -23,7 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'v1',
-    'namespace' => 'App\Http\Controllers\Api\V1'
+    'namespace' => 'App\Http\Controllers\Api\V1',
+    'middleware' => 'auth:sanctum'  //Protect the endpoints with Sanctum Auth
 ], function() {
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('invoices', InvoiceController::class);
